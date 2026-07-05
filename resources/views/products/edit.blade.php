@@ -44,7 +44,18 @@
             </div>
             <div class="mt-4">
                 <label>Gambar Produk</label>
-                <input type="file" name="image" class="w-full border rounded p-2">
+                @if($product->image)
+                <div class="mb-3">
+                    <img
+                        src="{{ asset('storage/'.$product->image) }}"
+                        alt="{{ $product->name }}"
+                        class="w-40 rounded border">
+                </div>
+                @endif
+                <input
+                    type="file"
+                    name="image"
+                    class="w-full border rounded p-2">
             </div>
             <div class="mt-6">
                 <button

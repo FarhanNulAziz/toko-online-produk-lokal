@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -42,6 +43,11 @@ class ProductController extends Controller
             'seller_name' => 'nullable|max:100',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+        $imageName = null;
+        if ($request->hasFile('image')) {
+            $imageName = $request->file('image')
+                ->store('products', 'public');
+        }
         Product::create([
             'category_id' => $validated['category_id'],
             'name' => $validated['name'],
@@ -49,7 +55,7 @@ class ProductController extends Controller
             'price' => $validated['price'],
             'stock' => $validated['stock'],
             'seller_name' => $validated['seller_name'],
-            'image' => null,
+            'image' => $imageName,
             'is_active' => true,
         ]);
         return redirect()
@@ -68,7 +74,7 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(product $product)
+    public function edit(Product $product)
     {
         $categories = Category::orderBy('name')->get();
         return view('products.edit', compact('product', 'categories'));
@@ -88,6 +94,13 @@ class ProductController extends Controller
             'seller_name' => 'nullable|max:100',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+        if ($request->hasFile('image')) {
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $validated['image'] = $request->file('image')
+                ->store('products', 'public');
+        }
         $product->update([
             'category_id' => $validated['category_id'],
             'name' => $validated['name'],
@@ -95,6 +108,7 @@ class ProductController extends Controller
             'price' => $validated['price'],
             'stock' => $validated['stock'],
             'seller_name' => $validated['seller_name'],
+            'image' => $validated['image'] ?? $product->image,
             'is_active' => true,
         ]);
         return redirect()

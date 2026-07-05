@@ -20,6 +20,7 @@
                 <tr>
                     <th class="border p-2">No</th>
                     <th class="border p-2">Produk</th>
+                    <th class="border p-2">Gambar</th>
                     <th class="border p-2">Kategori</th>
                     <th class="border p-2">Harga</th>
                     <th class="border p-2">Stok</th>
@@ -36,6 +37,18 @@
                     </td>
                     <td class="border p-2">
                         {{ $product->name }}
+                    </td>
+                    <td class="border p-2 text-center">
+                        @if($product->image)
+                        <div class="w-32 h-32 mx-auto overflow-hidden rounded-lg border bg-gray-100">
+                            <img
+                                src="{{ asset('storage/' . $product->image) }}"
+                                alt="{{ $product->name }}"
+                                class="w-full h-full object-cover">
+                        </div>
+                        @else
+                        <span class="text-gray-500">Tidak ada</span>
+                        @endif
                     </td>
                     <td class="border p-2">
                         {{ $product->category->name }}
