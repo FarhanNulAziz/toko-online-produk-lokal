@@ -63,7 +63,7 @@
 
             <div class="mt-8 border-t border-slate-200 pt-8">
                 @if($product->stock > 0)
-                <h2 class="mb-4 text-lg font-semibold text-slate-900">Pesan Produk Ini</h2>
+                <h2 class="mb-4 text-lg font-semibold text-slate-900">Tambahkan ke Keranjang</h2>
 
                 @if($errors->any())
                 <div class="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
@@ -75,45 +75,8 @@
                 </div>
                 @endif
 
-                <form action="{{ route('order.store', $product) }}" method="POST" class="space-y-4">
+                <form action="{{ route('cart.store', $product) }}" method="POST" class="flex items-end gap-3">
                     @csrf
-
-                    <div>
-                        <label for="customer_name" class="mb-1.5 block text-sm font-medium text-slate-700">Nama Lengkap</label>
-                        <input
-                            type="text"
-                            id="customer_name"
-                            name="customer_name"
-                            value="{{ old('customer_name') }}"
-                            required
-                            maxlength="100"
-                            placeholder="Nama penerima"
-                            class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500">
-                    </div>
-
-                    <div>
-                        <label for="phone" class="mb-1.5 block text-sm font-medium text-slate-700">Nomor HP / WhatsApp</label>
-                        <input
-                            type="text"
-                            id="phone"
-                            name="phone"
-                            value="{{ old('phone') }}"
-                            required
-                            maxlength="20"
-                            placeholder="08xxxxxxxxxx"
-                            class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500">
-                    </div>
-
-                    <div>
-                        <label for="address" class="mb-1.5 block text-sm font-medium text-slate-700">Alamat Pengiriman</label>
-                        <textarea
-                            id="address"
-                            name="address"
-                            required
-                            rows="3"
-                            placeholder="Alamat lengkap penerima"
-                            class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500">{{ old('address') }}</textarea>
-                    </div>
 
                     <div>
                         <label for="quantity" class="mb-1.5 block text-sm font-medium text-slate-700">Jumlah</label>
@@ -121,29 +84,15 @@
                             type="number"
                             id="quantity"
                             name="quantity"
-                            value="{{ old('quantity', 1) }}"
+                            value="1"
                             required
                             min="1"
                             max="{{ $product->stock }}"
-                            class="w-32 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500">
+                            class="w-24 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500">
                     </div>
 
-                    <div>
-                        <p class="mb-1.5 text-sm font-medium text-slate-700">Metode Pembayaran</p>
-                        <div class="grid grid-cols-2 gap-3">
-                            <label class="flex cursor-pointer items-center gap-2 rounded-lg border border-slate-300 px-3 py-2.5 text-sm has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50">
-                                <input type="radio" name="payment_method" value="cod" required {{ old('payment_method') === 'cod' || !old('payment_method') ? 'checked' : '' }} class="text-teal-600 focus:ring-teal-500">
-                                COD (Bayar di Tempat)
-                            </label>
-                            <label class="flex cursor-pointer items-center gap-2 rounded-lg border border-slate-300 px-3 py-2.5 text-sm has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50">
-                                <input type="radio" name="payment_method" value="transfer" {{ old('payment_method') === 'transfer' ? 'checked' : '' }} class="text-teal-600 focus:ring-teal-500">
-                                Transfer Bank
-                            </label>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="w-full rounded-xl bg-teal-600 py-3 font-semibold text-white transition hover:bg-teal-700">
-                        Pesan Sekarang
+                    <button type="submit" class="flex-1 rounded-xl bg-teal-600 py-2.5 font-semibold text-white transition hover:bg-teal-700">
+                        Tambah ke Keranjang
                     </button>
                 </form>
                 @else
