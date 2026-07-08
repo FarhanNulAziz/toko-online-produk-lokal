@@ -18,7 +18,6 @@ class Product extends Model
         'seller_name',
         'is_active',
     ];
-
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

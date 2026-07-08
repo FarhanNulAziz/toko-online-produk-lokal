@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Order extends Model
 {
+    public $timestamps = false;
+
     protected $fillable = [
         'product_id',
         'customer_name',
@@ -18,8 +20,10 @@ class Order extends Model
         'status',
         'order_date',
     ];
-
-    public function product(): BelongsTo
+    protected $casts = [
+        'order_date' => 'datetime',
+    ];
+    public function product()
     {
         return $this->belongsTo(Product::class);
     }

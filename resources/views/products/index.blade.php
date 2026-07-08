@@ -10,6 +10,26 @@
                 Tambah Produk
             </a>
         </div>
+        <div class="mb-6">
+            <form action="{{ route('products.index') }}" method="GET" class="flex gap-3">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ request('search') }}"
+                    placeholder="Cari nama produk..."
+                    class="w-80 border rounded-lg px-4 py-2 text-black bg-white">
+                <button
+                    type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
+                    Cari
+                </button>
+                <a
+                    href="{{ route('products.index') }}"
+                    class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
+                    Reset
+                </a>
+            </form>
+        </div>
         @if(session('success'))
         <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
             {{ session('success') }}
@@ -33,7 +53,7 @@
                 @forelse($products as $product)
                 <tr>
                     <td class="border p-2">
-                        {{ $loop->iteration }}
+                        {{ $products->firstItem() + $loop->index }}
                     </td>
                     <td class="border p-2">
                         {{ $product->name }}
@@ -54,7 +74,7 @@
                         {{ $product->category->name }}
                     </td>
                     <td class="border p-2">
-                        Rp {{ number_format($product->price,0,',','.') }}
+                        Rp {{ number_format($product->price, 0, ',', '.') }}
                     </td>
                     <td class="border p-2">
                         {{ $product->stock }}
@@ -70,25 +90,25 @@
                         @endif
                     </td>
                     <td class="border p-2">
-                        <a
-                            href="{{ route('products.edit', $product) }}"
-                            class="text-blue-600 hover:underline">
-                            Edit
-                        </a>
-                        |
-                        <form
-                            action="{{ route('products.destroy', $product) }}"
-                            method="POST"
-                            class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button
-                                type="submit"
-                                onclick="return confirm('Yakin ingin menghapus produk ini?')"
-                                class="text-red-600 hover:underline">
-                                Hapus
-                            </button>
-                        </form>
+                        <div class="flex justify-center gap-2">
+                            <a
+                                href="{{ route('products.edit', $product) }}"
+                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm transition">
+                                Edit
+                            </a>
+                            <form
+                                action="{{ route('products.destroy', $product) }}"
+                                method="POST"
+                                onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button
+                                    type="submit"
+                                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition">
+                                    Hapus
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 @empty
@@ -100,5 +120,8 @@
                 @endforelse
             </tbody>
         </table>
+        <div class="mt-6">
+            {{ $products->links() }}
+        </div>
     </div>
 </x-layouts::app>
