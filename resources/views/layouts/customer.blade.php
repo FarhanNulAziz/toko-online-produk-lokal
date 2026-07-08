@@ -8,7 +8,6 @@
     <title>@yield('title', 'Toko Produk Lokal')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-
 <body class="bg-slate-50 text-slate-900">
     <!-- NAVBAR -->
     <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
@@ -33,10 +32,24 @@
                     </a>
                 </nav>
                 <div class="hidden items-center gap-3 md:flex">
-                    <a href="{{ route('login') }}"
+                    @auth
+                    <span class="text-sm text-slate-600">Hai, {{ auth()->user()->name }}</span>
+                    <form action="{{ route('customer.logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="rounded-xl border border-slate-300 px-4 py-2 transition hover:bg-slate-100">
+                            Keluar
+                        </button>
+                    </form>
+                    @else
+                    <a href="{{ route('customer.login') }}"
                         class="rounded-xl border border-slate-300 px-4 py-2 transition hover:bg-slate-100">
-                        Login
+                        Masuk
                     </a>
+                    <a href="{{ route('customer.register') }}"
+                        class="rounded-xl bg-teal-600 px-4 py-2 font-medium text-white transition hover:bg-teal-700">
+                        Daftar
+                    </a>
+                    @endauth
                 </div>
                 <button
                     type="button"
@@ -59,9 +72,22 @@
                     <a href="{{ route('home') }}#tentang" class="rounded-lg px-3 py-2 hover:bg-slate-100">
                         Tentang
                     </a>
-                    <a href="{{ route('login') }}" class="mt-2 rounded-lg border border-slate-300 px-3 py-2 text-center hover:bg-slate-100">
-                        Login
+                    @auth
+                    <div class="mt-2 flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2">
+                        <span class="text-slate-600">Hai, {{ auth()->user()->name }}</span>
+                        <form action="{{ route('customer.logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="font-medium text-teal-700">Keluar</button>
+                        </form>
+                    </div>
+                    @else
+                    <a href="{{ route('customer.login') }}" class="mt-2 rounded-lg border border-slate-300 px-3 py-2 text-center hover:bg-slate-100">
+                        Masuk
                     </a>
+                    <a href="{{ route('customer.register') }}" class="rounded-lg bg-teal-600 px-3 py-2 text-center font-medium text-white hover:bg-teal-700">
+                        Daftar
+                    </a>
+                    @endauth
                 </nav>
             </div>
         </div>
@@ -108,5 +134,4 @@
         </div>
     </footer>
 </body>
-
 </html>

@@ -12,7 +12,21 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'role' => \App\Http\Middleware\EnsureUserHasRole::class,
+        ]);
+
+        $middleware->redirectGuestsTo(function (Request $request) {
+            return $request->routeIs('dashboard', 'categories.*', 'products.*', 'orders.*')
+                ? route('login')
+                : route('customer.login');
+        });
+
+        \Illuminate\Auth\Middleware\RedirectIfAuthenticated::redirectUsing(function (Request $request) {
+            return $request->user()?->role === 'admin'
+                ? route('dashboard')
+                : route('home');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
