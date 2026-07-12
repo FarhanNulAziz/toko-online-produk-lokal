@@ -14,29 +14,31 @@
 
         <h1 class="mt-5 text-2xl font-bold text-slate-900">Pesanan Berhasil Dibuat!</h1>
         <p class="mt-2 text-slate-500">
-            Terima kasih, {{ $order->customer_name }}. Pesanan kamu sudah kami terima dan akan segera diproses oleh penjual.
+            Terima kasih, {{ $orders->first()->customer_name }}. Pesanan kamu sudah kami terima dan akan segera diproses oleh penjual.
         </p>
 
         <div class="mt-8 space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left text-sm">
-            <div class="flex justify-between">
-                <span class="text-slate-500">Nomor Pesanan</span>
-                <span class="font-medium text-slate-900">#{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</span>
+            @foreach($orders as $order)
+            <div class="flex items-center justify-between {{ !$loop->last ? 'border-b border-slate-200 pb-3' : '' }}">
+                <div>
+                    <p class="font-medium text-slate-900">{{ $order->product->name }}</p>
+                    <p class="text-xs text-slate-500">
+                        #{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }} &middot; {{ $order->quantity }} pcs
+                    </p>
+                </div>
+                <p class="font-semibold text-slate-900">Rp {{ number_format($order->total_price, 0, ',', '.') }}</p>
             </div>
-            <div class="flex justify-between">
-                <span class="text-slate-500">Produk</span>
-                <span class="font-medium text-slate-900">{{ $order->product->name }}</span>
-            </div>
-            <div class="flex justify-between">
-                <span class="text-slate-500">Jumlah</span>
-                <span class="font-medium text-slate-900">{{ $order->quantity }}</span>
-            </div>
-            <div class="flex justify-between">
+            @endforeach
+
+            <div class="flex justify-between border-t border-slate-300 pt-3">
                 <span class="text-slate-500">Total Bayar</span>
-                <span class="font-semibold text-slate-900">Rp {{ number_format($order->total_price, 0, ',', '.') }}</span>
+                <span class="font-bold text-slate-900">Rp {{ number_format($total, 0, ',', '.') }}</span>
             </div>
             <div class="flex justify-between">
                 <span class="text-slate-500">Metode Pembayaran</span>
-                <span class="font-medium text-slate-900">{{ $order->payment_method === 'cod' ? 'COD (Bayar di Tempat)' : 'Transfer Bank' }}</span>
+                <span class="font-medium text-slate-900">
+                    {{ $orders->first()->payment_method === 'cod' ? 'COD (Bayar di Tempat)' : 'Transfer Bank' }}
+                </span>
             </div>
             <div class="flex justify-between">
                 <span class="text-slate-500">Status</span>
@@ -45,11 +47,11 @@
         </div>
 
         <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <a href="{{ route('catalog') }}" class="rounded-xl bg-teal-600 px-6 py-3 font-semibold text-white transition hover:bg-teal-700">
-                Belanja Produk Lain
+            <a href="{{ route('orders.history') }}" class="rounded-xl bg-teal-600 px-6 py-3 font-semibold text-white transition hover:bg-teal-700">
+                Lihat Pesanan Saya
             </a>
-            <a href="{{ route('home') }}" class="rounded-xl border border-slate-300 px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-100">
-                Kembali ke Beranda
+            <a href="{{ route('catalog') }}" class="rounded-xl border border-slate-300 px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-100">
+                Belanja Produk Lain
             </a>
         </div>
     </div>

@@ -8,18 +8,25 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderHistoryController;
 
 
 Route::get('/', [CustomerController::class, 'home'])->name('home');
 Route::get('/produk', [CustomerController::class, 'catalog'])->name('catalog');
 Route::get('/produk/{product}', [CustomerController::class, 'show'])->name('product.show');
-Route::post('/produk/{product}/pesan', [CustomerController::class, 'storeOrder'])->name('order.store');
-Route::get('/pesanan/{order}/sukses', [CustomerController::class, 'orderSuccess'])->name('order.success');
 
 Route::get('/keranjang', [CartController::class, 'index'])->name('cart.index');
 Route::post('/keranjang/{product}', [CartController::class, 'store'])->name('cart.store');
 Route::patch('/keranjang/{product}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/keranjang/{product}', [CartController::class, 'destroy'])->name('cart.destroy');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('/checkout/sukses', [CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('/riwayat-pesanan', [OrderHistoryController::class, 'index'])->name('orders.history');
+});
 
 Route::middleware('guest')->group(function () {
     Route::get('/masuk', [CustomerAuthController::class, 'showLogin'])->name('customer.login');

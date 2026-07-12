@@ -102,15 +102,11 @@
                     <span class="font-semibold text-slate-900">Rp {{ number_format($total, 0, ',', '.') }}</span>
                 </div>
 
-                <button
-                    type="button"
-                    disabled
-                    class="mt-5 w-full cursor-not-allowed rounded-xl bg-slate-300 py-3 text-center font-semibold text-slate-500">
+                <a
+                    href="{{ route('checkout.index') }}"
+                    class="mt-5 block w-full rounded-xl bg-teal-600 py-3 text-center font-semibold text-white transition hover:bg-teal-700">
                     Lanjut ke Checkout
-                </button>
-                <p class="mt-2 text-center text-xs text-slate-400">
-                    Fitur checkout akan segera tersedia.
-                </p>
+                </a>
 
                 <a href="{{ route('catalog') }}" class="mt-3 block text-center text-sm font-medium text-teal-700 hover:underline">
                     Lanjut Belanja

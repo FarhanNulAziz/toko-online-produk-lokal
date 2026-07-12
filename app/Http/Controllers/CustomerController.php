@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Order;
 use App\Models\Product;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -52,7 +50,7 @@ class CustomerController extends Controller
     }
 
     /**
-     * Display a single product with its order form.
+     * Display a single product with its add-to-cart form.
      */
     public function show(Product $product): View
     {
@@ -68,54 +66,5 @@ class CustomerController extends Controller
 
         return view('customer.show', compact('product', 'relatedProducts'));
     }
-
-    /**
-     * Store a new guest order for the given product.
-     */
-    public function storeOrder(Request $request, Product $product): RedirectResponse
-    {
-        abort_unless($product->is_active, 404);
-
-        $validated = $request->validate([
-            'customer_name' => 'required|string|max:100',
-            'phone' => 'required|string|max:20',
-            'address' => 'required|string',
-            'quantity' => 'required|integer|min:1',
-            'payment_method' => 'required|in:cod,transfer',
-        ]);
-
-        if ($validated['quantity'] > $product->stock) {
-            return back()
-                ->withErrors(['quantity' => 'Stok tidak mencukupi. Sisa stok: ' . $product->stock])
-                ->withInput();
-        }
-
-        $order = Order::create([
-            'product_id' => $product->id,
-            'customer_name' => $validated['customer_name'],
-            'phone' => $validated['phone'],
-            'address' => $validated['address'],
-            'quantity' => $validated['quantity'],
-            'total_price' => $product->price * $validated['quantity'],
-            'payment_method' => $validated['payment_method'],
-            'status' => 'pending',
-            'order_date' => now(),
-        ]);
-
-        $product->decrement('stock', $validated['quantity']);
-
-        return redirect()
-            ->route('order.success', $order)
-            ->with('success', 'Pesanan berhasil dibuat.');
-    }
-
-    /**
-     * Display the order confirmation page.
-     */
-    public function orderSuccess(Order $order): View
-    {
-        $order->load('product.category');
-
-        return view('customer.order-success', compact('order'));
-    }
 }
+

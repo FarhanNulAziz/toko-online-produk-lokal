@@ -10,6 +10,7 @@ class Order extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'user_id',
         'product_id',
         'customer_name',
         'phone',
@@ -26,5 +27,9 @@ class Order extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -44,6 +44,9 @@
                         @endif
                     </a>
                     @auth
+                    <a href="{{ route('orders.history') }}" class="{{ request()->routeIs('orders.history') ? 'text-teal-700 font-medium' : 'text-slate-600 hover:text-teal-700' }} text-sm transition">
+                        Pesanan Saya
+                    </a>
                     <span class="text-sm text-slate-600">Hai, {{ auth()->user()->name }}</span>
                     <form action="{{ route('customer.logout') }}" method="POST">
                         @csrf
@@ -91,6 +94,9 @@
                         @endif
                     </a>
                     @auth
+                    <a href="{{ route('orders.history') }}" class="rounded-lg px-3 py-2 {{ request()->routeIs('orders.history') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-slate-100' }}">
+                        Pesanan Saya
+                    </a>
                     <div class="mt-2 flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2">
                         <span class="text-slate-600">Hai, {{ auth()->user()->name }}</span>
                         <form action="{{ route('customer.logout') }}" method="POST">
