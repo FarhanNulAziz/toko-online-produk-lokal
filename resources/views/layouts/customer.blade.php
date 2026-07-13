@@ -1,14 +1,29 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Toko Produk Lokal')</title>
+    <meta name="theme-color" content="#0d9488">
+    <meta name="description" content="@yield('meta_description', 'Etalase digital untuk produk UMKM lokal Indonesia — kain tenun, kerajinan kayu dan rotan, hingga perlengkapan rumah tangga ramah lingkungan.')">
+
+    <title>@yield('title', 'ProdukLokal — Etalase UMKM Lokal Indonesia')</title>
+
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ProdukLokal">
+    <meta property="og:title" content="@yield('title', 'ProdukLokal — Etalase UMKM Lokal Indonesia')">
+    <meta property="og:description" content="@yield('meta_description', 'Etalase digital untuk produk UMKM lokal Indonesia — kain tenun, kerajinan kayu dan rotan, hingga perlengkapan rumah tangga ramah lingkungan.')">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-slate-50 text-slate-900">
+    <!-- PAGE PROGRESS BAR -->
+    <div id="page-progress" class="fixed inset-x-0 top-0 z-[100] h-0.5 origin-left scale-x-0 bg-teal-500 transition-transform duration-300 ease-out"></div>
+
     <!-- NAVBAR -->
     <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
         <div class="mx-auto max-w-7xl px-6">
@@ -47,6 +62,11 @@
                     <a href="{{ route('orders.history') }}" class="{{ request()->routeIs('orders.history') ? 'text-teal-700 font-medium' : 'text-slate-600 hover:text-teal-700' }} text-sm transition">
                         Pesanan Saya
                     </a>
+                    @if(auth()->user()->isAdmin())
+                    <a href="{{ route('dashboard') }}" class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800">
+                        Dashboard Admin
+                    </a>
+                    @endif
                     <span class="text-sm text-slate-600">Hai, {{ auth()->user()->name }}</span>
                     <form action="{{ route('customer.logout') }}" method="POST">
                         @csrf
@@ -97,6 +117,11 @@
                     <a href="{{ route('orders.history') }}" class="rounded-lg px-3 py-2 {{ request()->routeIs('orders.history') ? 'bg-teal-50 text-teal-700 font-medium' : 'hover:bg-slate-100' }}">
                         Pesanan Saya
                     </a>
+                    @if(auth()->user()->isAdmin())
+                    <a href="{{ route('dashboard') }}" class="rounded-lg bg-slate-900 px-3 py-2 text-center font-medium text-white hover:bg-slate-800">
+                        Dashboard Admin
+                    </a>
+                    @endif
                     <div class="mt-2 flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2">
                         <span class="text-slate-600">Hai, {{ auth()->user()->name }}</span>
                         <form action="{{ route('customer.logout') }}" method="POST">
@@ -157,5 +182,81 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        (function () {
+            var bar = document.getElementById('page-progress');
+
+            function startProgress() {
+                bar.style.transform = 'scaleX(0.7)';
+            }
+
+            function resetProgress() {
+                bar.style.transition = 'none';
+                bar.style.transform = 'scaleX(0)';
+                requestAnimationFrame(function () {
+                    bar.style.transition = '';
+                });
+            }
+
+            // Show progress when navigating to another page on this site.
+            document.addEventListener('click', function (e) {
+                var link = e.target.closest('a[href]');
+                if (!link || link.target === '_blank' || link.hasAttribute('download')) return;
+                if (!link.href || link.href.indexOf('#') !== -1 && link.href.split('#')[0] === window.location.href.split('#')[0]) return;
+                if (link.origin !== window.location.origin) return;
+                startProgress();
+            });
+
+            // Show progress + disable the submit button while a form is processing.
+            document.addEventListener('submit', function (e) {
+                var form = e.target;
+                if (form.tagName !== 'FORM') return;
+
+                startProgress();
+
+                var submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn && !submitBtn.disabled) {
+                    submitBtn.dataset.originalText = submitBtn.innerHTML;
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
+                    submitBtn.innerHTML =
+                        '<span class="inline-flex items-center justify-center gap-2">' +
+                        '<svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">' +
+                        '<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>' +
+                        '<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>' +
+                        '</svg>Memproses...</span>';
+                }
+            });
+
+            // Reset the bar whenever a page becomes visible (fresh load or back/forward cache).
+            window.addEventListener('pageshow', resetProgress);
+        })();
+
+        // Fade-reveal sections as they scroll into view.
+        (function () {
+            var revealEls = document.querySelectorAll('[data-reveal]');
+            if (revealEls.length === 0) return;
+
+            if (!('IntersectionObserver' in window)) {
+                revealEls.forEach(function (el) {
+                    el.classList.remove('opacity-0', 'translate-y-6');
+                    el.classList.add('opacity-100', 'translate-y-0');
+                });
+                return;
+            }
+
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.remove('opacity-0', 'translate-y-6');
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    observer.unobserve(entry.target);
+                });
+            }, { threshold: 0.15 });
+
+            revealEls.forEach(function (el) { observer.observe(el); });
+        })();
+    </script>
 </body>
 </html>

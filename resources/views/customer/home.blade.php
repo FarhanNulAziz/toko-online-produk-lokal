@@ -1,6 +1,7 @@
 @extends('layouts.customer')
 
 @section('title', 'ProdukLokal — Etalase UMKM Lokal Indonesia')
+@section('meta_description', 'Belanja produk asli UMKM lokal Indonesia — kain tenun, kerajinan kayu dan rotan, hingga perlengkapan rumah tangga ramah lingkungan, langsung dari penjualnya.')
 
 @section('content')
 
@@ -70,7 +71,7 @@
 </section>
 
 <!-- VALUE PROPS -->
-<section class="border-b border-slate-200 bg-white">
+<section class="border-b border-slate-200 bg-white opacity-0 translate-y-6 transition duration-700 ease-out" data-reveal>
     <div class="mx-auto grid max-w-7xl gap-8 px-6 py-12 sm:grid-cols-2 lg:grid-cols-4">
         @foreach([
             ['title' => 'Asli Buatan Lokal', 'desc' => 'Setiap produk dibuat oleh pelaku UMKM, bukan produk pabrikan massal.'],
@@ -92,7 +93,7 @@
 </section>
 
 <!-- CATEGORIES -->
-<section id="kategori" class="mx-auto max-w-7xl px-6 py-16">
+<section id="kategori" class="mx-auto max-w-7xl scroll-mt-20 px-6 py-16 opacity-0 translate-y-6 transition duration-700 ease-out" data-reveal>
     <div class="mb-8 flex items-end justify-between">
         <div>
             <p class="text-sm font-medium text-teal-700">Jelajahi</p>
@@ -129,7 +130,7 @@
 </section>
 
 <!-- FEATURED PRODUCTS -->
-<section class="bg-white py-16">
+<section class="bg-white py-16 opacity-0 translate-y-6 transition duration-700 ease-out" data-reveal>
     <div class="mx-auto max-w-7xl px-6">
         <div class="mb-8 flex items-end justify-between">
             <div>
@@ -162,7 +163,7 @@
 </section>
 
 <!-- ABOUT / CTA -->
-<section id="tentang" class="mx-auto max-w-7xl px-6 py-16">
+<section id="tentang" class="mx-auto max-w-7xl scroll-mt-20 px-6 py-16 opacity-0 translate-y-6 transition duration-700 ease-out" data-reveal>
     <div class="grid gap-10 rounded-3xl bg-teal-700 p-10 text-white md:grid-cols-2 md:items-center md:p-14">
         <div>
             <h2 class="text-2xl font-bold md:text-3xl">Tentang ProdukLokal</h2>

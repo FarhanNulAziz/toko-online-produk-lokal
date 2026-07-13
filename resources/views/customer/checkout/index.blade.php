@@ -1,7 +1,5 @@
 @extends('layouts.customer')
-
 @section('title', 'Checkout — ProdukLokal')
-
 @section('content')
 
 <section class="mx-auto max-w-5xl px-6 py-10">
