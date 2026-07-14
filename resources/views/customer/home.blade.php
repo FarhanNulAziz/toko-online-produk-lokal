@@ -80,7 +80,6 @@
     </div>
 </section>
 
-<!-- VALUE PROPS -->
 <section class="border-b border-slate-200 bg-white opacity-0 translate-y-6 transition duration-700 ease-out" data-reveal>
     <div class="mx-auto grid max-w-7xl gap-8 px-6 py-12 sm:grid-cols-2 lg:grid-cols-4">
         @foreach([
@@ -139,7 +138,6 @@
     @endif
 </section>
 
-<!-- FEATURED PRODUCTS -->
 <section class="bg-white py-16 opacity-0 translate-y-6 transition duration-700 ease-out" data-reveal>
     <div class="mx-auto max-w-7xl px-6">
         <div class="mb-8 flex items-end justify-between">
@@ -172,7 +170,6 @@
     </div>
 </section>
 
-<!-- ABOUT / CTA -->
 <section id="tentang" class="mx-auto max-w-7xl scroll-mt-20 px-6 py-16 opacity-0 translate-y-6 transition duration-700 ease-out" data-reveal>
     <div class="grid gap-10 rounded-3xl bg-teal-700 p-10 text-white md:grid-cols-2 md:items-center md:p-14">
         <div>

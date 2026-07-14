@@ -251,8 +251,7 @@
                 if (link.origin !== window.location.origin) return;
                 startProgress();
             });
-
-            // Show progress + disable the submit button while a form is processing.
+            
             document.addEventListener('submit', function(e) {
                 var form = e.target;
                 if (form.tagName !== 'FORM') return;
