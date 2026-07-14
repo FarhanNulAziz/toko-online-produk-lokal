@@ -6,7 +6,7 @@
 @section('content')
 
 <!-- HERO -->
-<section class="relative overflow-hidden bg-slate-900">
+<section class="relative overflow-hidden bg-neutral-950">
     <svg class="pointer-events-none absolute inset-0 h-full w-full opacity-[0.07]" xmlns="http://www.w3.org/2000/svg">
         <defs>
             <pattern id="woven" width="28" height="28" patternUnits="userSpaceOnUse">
@@ -31,7 +31,7 @@
             </p>
             <div class="mt-8 flex flex-wrap gap-3">
                 <a href="{{ route('catalog') }}"
-                    class="rounded-xl bg-teal-500 px-6 py-3 font-semibold text-slate-900 transition hover:bg-teal-400">
+                    class="rounded-xl bg-teal-400 px-6 py-3 font-semibold text-neutral-950 transition hover:bg-teal-300">
                     Belanja Sekarang
                 </a>
                 <a href="#kategori"
@@ -40,29 +40,39 @@
                 </a>
             </div>
         </div>
-        <div class="grid grid-cols-2 gap-4">
-            @forelse($products->take(4) as $showcase)
+        <div class="flex items-start gap-5">
+            @php
+                $showcaseStyles = [
+                    ['width' => 'w-[38%]', 'offset' => ''],
+                    ['width' => 'w-[34%]', 'offset' => 'translate-y-16'],
+                    ['width' => 'w-[24%]', 'offset' => 'translate-y-6'],
+                ];
+            @endphp
+            @forelse($products->take(3) as $showcase)
+            @php $style = $showcaseStyles[$loop->index] ?? end($showcaseStyles); @endphp
             <a href="{{ route('product.show', $showcase) }}"
-                class="group overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur transition hover:border-teal-400/50 {{ $loop->iteration === 1 || $loop->iteration === 4 ? 'translate-y-4' : '' }}">
-                <div class="aspect-square overflow-hidden bg-white/10">
-                    @if($showcase->image)
-                    <img src="{{ asset('storage/' . $showcase->image) }}" alt="{{ $showcase->name }}"
-                        class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
-                    @else
-                    <div class="flex h-full w-full items-center justify-center text-white/20">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5 12 3l9 4.5M3 7.5v9L12 21m-9-4.5L12 21m0 0 9-4.5m0-9L12 3m9 4.5v9L12 21" />
-                        </svg>
+                class="group flex flex-shrink-0 flex-col {{ $style['width'] }} {{ $style['offset'] }}">
+                <div class="overflow-hidden rounded-2xl bg-white shadow-[0_0_25px_-6px_rgba(45,212,191,0.55)] ring-1 ring-teal-400/40 transition duration-300 group-hover:shadow-[0_0_35px_-4px_rgba(45,212,191,0.8)] group-hover:ring-teal-400/70">
+                    <div class="aspect-[4/5] overflow-hidden">
+                        @if($showcase->image)
+                        <img src="{{ asset('storage/' . $showcase->image) }}" alt="{{ $showcase->name }}"
+                            class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                        @else
+                        <div class="flex h-full w-full items-center justify-center text-slate-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5 12 3l9 4.5M3 7.5v9L12 21m-9-4.5L12 21m0 0 9-4.5m0-9L12 3m9 4.5v9L12 21" />
+                            </svg>
+                        </div>
+                        @endif
                     </div>
-                    @endif
                 </div>
-                <div class="p-3">
+                <div class="mt-3 px-1">
                     <p class="line-clamp-1 text-sm font-medium text-white">{{ $showcase->name }}</p>
-                    <p class="text-xs text-teal-300">Rp {{ number_format($showcase->price, 0, ',', '.') }}</p>
+                    <p class="text-xs font-semibold text-teal-400">Rp {{ number_format($showcase->price, 0, ',', '.') }}</p>
                 </div>
             </a>
             @empty
-            <div class="col-span-2 rounded-2xl border border-white/10 bg-white/5 p-10 text-center text-slate-400">
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-10 text-center text-slate-400">
                 Belum ada produk untuk ditampilkan.
             </div>
             @endforelse
@@ -109,7 +119,7 @@
         Belum ada kategori tersedia.
     </p>
     @else
-    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="grid grid-flow-col grid-rows-2 auto-cols-[280px] gap-5 overflow-x-auto pb-4">
         @foreach($categories as $category)
         <a href="{{ route('catalog', ['category' => $category->id]) }}"
             class="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:border-teal-300 hover:shadow-lg hover:shadow-slate-200/70">
